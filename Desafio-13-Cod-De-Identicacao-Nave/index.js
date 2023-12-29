@@ -1,37 +1,42 @@
 // Deve testar se o codigo verificador é valido sim ou não
 // Esta verificação é feita com uma serie de etapas descritas no encunciado
 // do exercício
-// A verificação do codigo faz da seguinte forma: eu vou pegar o ultimo número
-// que o usuário me enviar a partir deste número vou fazer todas as etapas
-// descritas no enunciado, depois vou checar se este número confere com o ultimo
-// número do original
-
+// Esta verificação deve ser feita removendo o ultimo número da sequencia de números
+// passada pelo usuário, nisso a função verification vai fazer todas as etapas do enunciado
+// utilizando principalmente a função de array reduce
+// Após isso verificando se o retornado pelo verification bate com o ultimo número da sequencia
+// de números passada pelo usuário, devolvendo true ou false.
+// obs: em uma das etapas eu me confundi pensando que era pra testar se os números enviados
+// para o verification eram par ou impar, porem era pra testar o índice dos números, nisso
+// mostra o valor de prestar mais atenção no enunciado
+// obs: o enunciado deste programa foi muito complicado de entender, não sei se foi a minha
+// interpretação ou ele esta confuso mesmo, pois não indica de forma correta como ele quer
+// que seja este codigo, da onde ele deve ser tirado tive que olhar a resposta para entender
 const verification = (num) => {
-  let verifNum = num.toString().split("")
-  console.log(verifNum)
-  let pair = 0;
-  let odd = 0;
-  let tot = 0;
-  let verDigit = 0;
-
-  for (i = 0; i < verifNum.length; i++) {
-    if (verifNum[i] % 2 === 0) {
-      pair += parseInt(verifNum[i]);
+  let verifNum = num;
+  let sumOdd = 0;
+  let sumPair = verifNum.reduce((accum, num, index) => {
+    if (index == 0 || index % 2 == 0) {
+      return accum + num;
     } else {
-      odd += parseInt(verifNum[i]);
+      sumOdd += num;
+      return accum;
     }
-  }
-  pair *= 3;
-  tot = pair + odd;
-  tot = tot % 10;
-  if (tot == 0) {
-    verDigit = 0;
-    console.log(true)
+  }, 0);
+
+  let finalCod = sumPair * 3 + sumOdd;
+  finalCod %= 10;
+  if (finalCod == 0) {
+    return 0;
   } else {
-    verDigit = 10 - tot;
-    console.log(false)
+    return (finalCod = 10 - finalCod);
   }
-  console.log(verDigit);
 };
 
-verification(547020743789);
+let code = (num) => {
+  const code = num.toString().split("").map(Number);
+  const withoutLastNumber = code.slice(0, -1);
+  const numberVerification = verification(withoutLastNumber);
+ return numberVerification === code[code.length -1]
+};
+console.log(code(301354030348));
